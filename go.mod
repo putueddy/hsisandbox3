@@ -1,3 +1,3 @@
-module sandboxhsi3/tugas2
+module sandboxhsi3.com/golang
 
 go 1.21.6

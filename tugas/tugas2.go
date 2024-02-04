@@ -1,4 +1,4 @@
-package main
+package tugas2
 
 import (
 	"fmt"
@@ -8,14 +8,14 @@ import (
 	"time"
 )
 
-func getSemester(bulan int) int {
+func GetSemester(bulan int) int {
 	if bulan >= 1 && bulan <= 6 {
 		return 1
 	}
 	return 2
 }
 
-func generatorNIK(gender string, tahun int, jumlah_yang_digenerate int) ([]string, error) {
+func GeneratorNIK(gender string, tahun int, jumlah_yang_digenerate int) ([]string, error) {
 	// NIK 12 digit
 	// 2 digit pertama adalah AR a.k.a Abdullah Roy
 	// 1 digit berikutnya N: 'male' a.k.a ikhwan; atau T: 'female' a.k.a akhwat
@@ -50,14 +50,14 @@ func generatorNIK(gender string, tahun int, jumlah_yang_digenerate int) ([]strin
 		if i > 99999 {
 			break
 		}
-		nik := fmt.Sprintf("%s%d%d-%05d", prefix, tahun%100, getSemester(int(time.Now().Month())), i)
+		nik := fmt.Sprintf("%s%d%d-%05d", prefix, tahun%100, GetSemester(int(time.Now().Month())), i)
 		niks = append(niks, nik)
 	}
 
 	return niks, nil
 }
 
-func nikBerikutnya(nikSebelum string, jumlah_yang_digenerate int) ([]string, error) {
+func NikBerikut(nikSebelum string, jumlah_yang_digenerate int) ([]string, error) {
 	if len(nikSebelum) != 12 {
 		return nil, fmt.Errorf("parameter NIK tidak valid")
 	}
@@ -104,7 +104,7 @@ func nikBerikutnya(nikSebelum string, jumlah_yang_digenerate int) ([]string, err
 	return niks, nil
 }
 
-func kelompokHalaqah(niks []string) []string {
+func KelompokHalaqah(niks []string) []string {
 	// Interpretasi:
 	// - Kelompokkan NIK berdasarkan gender, angkatan
 	// - Urutkan NIK dalam kelompok tahun berdasarkan 5 digit terakhir
@@ -137,55 +137,4 @@ func kelompokHalaqah(niks []string) []string {
 	}
 
 	return result
-}
-
-func main() {
-	nikArn241, err := generatorNIK("male", 2024, 3)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(nikArn241)
-	}
-
-	nikArn192, err := nikBerikutnya("ARN192-00051", 2)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(nikArn192)
-	}
-
-	nikArn151, err := nikBerikutnya("ARN151-02024", 1)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(nikArn151)
-	}
-
-	nikArt211, err := generatorNIK("female", 2021, 1)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(nikArt211)
-	}
-
-	nikArt161, err := nikBerikutnya("ART161-01076", 1)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(nikArt161)
-	}
-
-	nikArt232, err := nikBerikutnya("ART232-00376", 2)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(nikArt232)
-	}
-
-	niks := append(nikArn241, nikArn192...)
-	niks = append(niks, nikArn151...)
-	niks = append(niks, nikArt232...)
-	niks = append(niks, nikArt161...)
-	niks = append(niks, nikArt211...)
-	fmt.Println(kelompokHalaqah(niks))
 }
